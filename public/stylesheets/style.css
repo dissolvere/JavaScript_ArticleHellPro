@@ -6,3 +6,11 @@ body {
 a {
   color: #00B7FF;
 }
+
+.responsive_img {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: auto;
+  height: 100%;
+}

@@ -1,5 +1,10 @@
-extends layout
+extends Layout/layout
+
+block headers
+  meta(name="google-signin-client_id" content="YOUR_CLIENT_ID.apps.googleusercontent.com")
 
 block content
-  h1= title
   p Welcome to #{title}
+
+  script(src="https://apis.google.com/js/platform.js" async defer)
+  div(class="g-signin2" data-onsuccess="onSignIn")
