@@ -17,7 +17,7 @@ databaseConnection.once('open', function() {
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Home' });
+  res.render('index', { title: 'Home', googleClientId : config.googleClientId});
 });
 
 /* GET login panel */
