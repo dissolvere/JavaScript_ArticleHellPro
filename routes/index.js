@@ -1,8 +1,22 @@
-var express = require('express');
+var app = require('express')();
+var passport = require('passport');
+var GoogleStrategy = require('passport-google-oauth20').Strategy;
 var mongoose = require('mongoose');
 var config = require('../Config/config')
 
-var router = express.Router();
+
+passport.use(
+  new GoogleStrategy({
+  clientID : config.googleClientId,
+  clientSecret : config.googleClientKey,
+  callbackURL :'/auth/google/callback'
+  },
+    (accessToken, refreshToken, profile, done) => {
+    console.log('accessToken', accessToken);
+    console.log('refresh token', refreshToken);
+    console.log('profile', profile);
+  })
+  );
 
 mongoose.connect(config.databaseURI, { useNewUrlParser: true });
 
@@ -15,20 +29,13 @@ databaseConnection.once('open', function() {
 });
 
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Home', googleClientId : config.googleClientId});
-});
-
-/* GET login panel */
-router.get('/login_panel', function(req, res, next) {
-  res.render('Login/login_panel', { title: 'Login Panel' });
-});
-
-/* 404 Not Found Error */
-router.get('*', function(req, res, next) {
-  res.render('Error/404', { title: '404 Not Found' });
-});
+app.get('/auth/google', 
+passport.authenticate('google', {
+  scope: ['profile', 'email']
+}))
 
 
-module.exports = router;
+app.get('/auth/google/callback', passport.authenticate('google'));
+
+
+module.exports = app;
